@@ -1,6 +1,6 @@
-import { type Message } from "@aix/ui";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { Message } from "./types";
 
 export interface ConversationState {
   loading: boolean;
@@ -15,9 +15,11 @@ export const useConversationStore = create<ConversationState>()(
   devtools((set) => ({
     loading: false,
     messages: [
-      { content: "Lorem ipsum dolar sit amet", role: "system" },
-      { content: "Lorem ipsum dolar sit amet", role: "assistant" },
-      { content: "Lorem ipsum dolar sit amet", role: "user" },
+      {
+        content: "Pretend you're Jarvis, Tony Stark's AI in Iron Man",
+        role: "system",
+      },
+      { content: "Hello sir, how can I help you?", role: "assistant" },
     ],
     input: "",
     onToggleLoading: () =>

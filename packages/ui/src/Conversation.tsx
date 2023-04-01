@@ -1,28 +1,171 @@
-import { Configuration, OpenAIApi } from "openai";
-import React, { ReactElement } from "react";
-import { BaseComponent } from "./core";
-import { AIXInput } from "./Input";
-import { Message } from "./Output";
+import {
+  ChatCompletionRequestMessage,
+  type ChatCompletionRequestMessageRoleEnum,
+} from "openai";
+import React from "react";
 import { useAIXContext } from "./Provider";
 import { cn } from "./Utils";
+import { RxPaperPlane } from "react-icons/rx";
 
-interface AIXConversationProps extends BaseComponent {
-  system: string;
+interface ChatInputProps {
+  input: string;
+  className?: string;
+  placeholder?: string;
+  icon?: React.ReactElement;
+  onChange: (value: string) => void;
+  onSend: () => void;
 }
 
-export const AIXConversation: React.FC<AIXConversationProps> = ({
-  children,
+const ChatInput: React.FC<ChatInputProps> = ({
+  input,
   className,
-  system,
+  placeholder,
+  icon,
+  onChange,
+  onSend,
+}) => {
+  return (
+    <div className={cn("w-full flex", className)}>
+      <input
+        className="w-full bg-transparent p-2 outline-none"
+        value={input}
+        onChange={(e: any) => onChange(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && onSend()}
+        placeholder={placeholder}
+      />
+      {!!icon && (
+        <div
+          className="w-12 h-12 bg-slate-900 text-slate-50 rounded-md flex items-center justify-center text-xl cursor-pointer"
+          onClick={onSend}
+        >
+          {icon}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface ChatBubbleProps {
+  role: ChatCompletionRequestMessageRoleEnum;
+  content: string;
+  className?: string;
+}
+
+const ChatBubble: React.FC<ChatBubbleProps> = ({
+  role,
+  content,
+  className,
 }) => {
   return (
     <div
       className={cn(
-        "h-screen w-1/3 p-4 flex flex-col justify-between",
+        "p-4 w-fit max-w-[90%] rounded-t-md font-sans",
+        role === "system" && "hidden",
+        role === "assistant" && "rounded-r-md",
+        role === "user" && "rounded-l-md",
         className
       )}
     >
-      {children}
+      {content}
     </div>
   );
 };
+
+interface ConversationProps {
+  messages: ChatCompletionRequestMessage[];
+  userMsg: string;
+  assistantClasses?: string;
+  className?: string;
+  userClasses?: string;
+  onChangeUserMsg: (value: string) => void;
+  onSend: (msg: ChatCompletionRequestMessage) => void;
+}
+
+const Conversation: React.FC<ConversationProps> = ({
+  className,
+  messages,
+  userMsg,
+  assistantClasses,
+  userClasses,
+  onChangeUserMsg,
+  onSend,
+}) => {
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const { onChatCompletion } = useAIXContext();
+
+  const handleSend = async () => {
+    onSend({
+      role: "user",
+      content: userMsg,
+    });
+    setLoading(true);
+
+    const msgs = [
+      ...messages,
+      { role: "user", content: userMsg },
+    ] as ChatCompletionRequestMessage[];
+    const res = await onChatCompletion(msgs);
+
+    const resMsg = {
+      role: res.data.choices[0].message?.role || "assistant",
+      content: res.data.choices[0].message?.content || "",
+    };
+
+    onSend(resMsg);
+    setLoading(false);
+  };
+
+  return (
+    <div
+      className={cn(
+        "h-screen w-1/3 p-4 flex flex-col justify-between fixed left-0",
+        !!className ? className : "bg-slate-200"
+      )}
+    >
+      <div className="flex flex-col gap-3 overflow-y-auto mb-4">
+        {messages.map((msg: ChatCompletionRequestMessage) => (
+          <ChatBubble
+            className={cn(
+              msg.role === "assistant"
+                ? !!assistantClasses
+                  ? assistantClasses
+                  : "bg-slate-400 text-slate-50 self-start"
+                : "",
+              msg.role === "user"
+                ? !!userClasses
+                  ? userClasses
+                  : "bg-sky-500 text-slate-50 self-end"
+                : ""
+            )}
+            {...msg}
+          />
+        ))}
+        {loading && (
+          <div
+            className={cn(
+              "p-4 w-1/2 flex flex-col gap-2 rounded-t-md rounded-r-md font-sans",
+              !!assistantClasses
+                ? assistantClasses
+                : "bg-slate-400 text-slate-50"
+            )}
+          >
+            <div className="w-full h-2 bg-slate-200 rounded-md animate-pulse"></div>
+            <div className="w-3/4 h-2 bg-slate-200 rounded-md animate-pulse"></div>
+          </div>
+        )}
+      </div>
+      <div>
+        <ChatInput
+          input={userMsg}
+          className="border-2 border-slate-400 p-2 rounded-md"
+          onChange={onChangeUserMsg}
+          onSend={handleSend}
+          placeholder="Hello world"
+          icon={<RxPaperPlane />}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Conversation;

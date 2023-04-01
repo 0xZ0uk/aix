@@ -1,5 +1,5 @@
 {
   "extends": "@aix/common/react-library.json",
-  "include": [".", "src"],
+  "include": ["index.tsx", "src"],
   "exclude": ["dist", "build", "node_modules"]
 }
