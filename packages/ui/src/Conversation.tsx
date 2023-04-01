@@ -77,18 +77,22 @@ interface ConversationProps {
   assistantClasses?: string;
   className?: string;
   userClasses?: string;
+  hint?: string;
   onChangeUserMsg: (value: string) => void;
   onSend: (msg: ChatCompletionRequestMessage) => void;
+  onClear: () => void;
 }
 
-const Conversation: React.FC<ConversationProps> = ({
+export const Conversation: React.FC<ConversationProps> = ({
   className,
   messages,
   userMsg,
   assistantClasses,
   userClasses,
+  hint,
   onChangeUserMsg,
   onSend,
+  onClear,
 }) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const { onChatCompletion } = useAIXContext();
@@ -123,6 +127,11 @@ const Conversation: React.FC<ConversationProps> = ({
       )}
     >
       <div className="flex flex-col gap-3 overflow-y-auto mb-4">
+        {!!hint && (
+          <div className="w-3/5 mx-auto my-8 text-center text-slate-500 text-xs">
+            {hint}
+          </div>
+        )}
         {messages.map((msg: ChatCompletionRequestMessage) => (
           <ChatBubble
             className={cn(
@@ -140,6 +149,14 @@ const Conversation: React.FC<ConversationProps> = ({
             {...msg}
           />
         ))}
+        {!!onClear && messages.length > 5 && (
+          <button
+            className="bg-transparent text-slate-600 underline w-fit h-fit text-xs mx-auto my-8"
+            onClick={onClear}
+          >
+            Clear Chat
+          </button>
+        )}
         {loading && (
           <div
             className={cn(
@@ -167,5 +184,3 @@ const Conversation: React.FC<ConversationProps> = ({
     </div>
   );
 };
-
-export default Conversation;

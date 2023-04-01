@@ -9,18 +9,21 @@ export interface ConversationState {
   onToggleLoading: () => void;
   onChangeInput: (value: string) => void;
   onAddMessage: (msg: Message) => void;
+  onClearChat: () => void;
 }
+
+const initMessages: Message[] = [
+  {
+    content: "Pretend you're Jarvis, Tony Stark's AI in Iron Man",
+    role: "system",
+  },
+  { content: "Hello, how can I help you?", role: "assistant" },
+];
 
 export const useConversationStore = create<ConversationState>()(
   devtools((set) => ({
     loading: false,
-    messages: [
-      {
-        content: "Pretend you're Jarvis, Tony Stark's AI in Iron Man",
-        role: "system",
-      },
-      { content: "Hello sir, how can I help you?", role: "assistant" },
-    ],
+    messages: initMessages,
     input: "",
     onToggleLoading: () =>
       set((state: ConversationState) => ({
@@ -35,5 +38,7 @@ export const useConversationStore = create<ConversationState>()(
         messages: [...state.messages, msg],
         input: "",
       })),
+    onClearChat: () =>
+      set((state: ConversationState) => ({ ...state, messages: initMessages })),
   }))
 );
