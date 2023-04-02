@@ -4,7 +4,7 @@ import {
 } from "openai";
 import React from "react";
 import { useAIXContext } from "./Provider";
-import { cn, parseGPTJSON } from "../Utils";
+import { cn, parseAppResponse } from "../Utils";
 import { RxPaperPlane } from "react-icons/rx";
 
 export interface ChatMessage extends ChatCompletionRequestMessage {
@@ -114,9 +114,10 @@ export const Conversation: React.FC<ConversationProps> = ({
 
     const resMsg = {
       role: "assistant" as ChatCompletionRequestMessageRoleEnum,
-      action: parseGPTJSON(res.data.choices[0].message!)?.action || undefined,
+      action:
+        parseAppResponse(res.data.choices[0].message!)?.action || undefined,
       content:
-        parseGPTJSON(res.data.choices[0].message!)?.message ||
+        parseAppResponse(res.data.choices[0].message!)?.message ||
         res.data.choices[0].message!.content,
     };
 
@@ -154,7 +155,7 @@ export const Conversation: React.FC<ConversationProps> = ({
             {...msg}
           />
         ))}
-        {!!onClear && messages.length > 5 && (
+        {!!onClear && !loading && messages.length > 5 && (
           <button
             className="bg-transparent text-slate-600 underline w-fit h-fit text-xs mx-auto my-8"
             onClick={onClear}

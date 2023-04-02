@@ -15,3 +15,15 @@ export type Route = {
   label: string;
   url: string;
 };
+
+export type Product = {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  size: string[];
+  color: string;
+  price: number;
+  type: string;
+  [key: string]: number | string | string[];
+};

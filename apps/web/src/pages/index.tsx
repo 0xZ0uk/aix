@@ -1,4 +1,3 @@
-import { parseGPTJSON } from "@aix/ui/src/Utils";
 import React from "react";
 import Card from "~/components/Card";
 import Header from "~/components/Header";
@@ -6,34 +5,48 @@ import Hero from "~/components/Hero";
 import Layout from "~/components/Layout";
 import { useToast } from "~/hooks/use-toast";
 import { debugObject } from "~/utils/debug";
-import { storeItems } from "~/utils/mock";
+import { Action, useActionsQueue } from "~/utils/stores/actions";
 import { useConversationStore } from "~/utils/stores/conversation";
+import { useShop } from "~/utils/stores/shop";
 
 export default function Web() {
   const { messages } = useConversationStore();
-  const [actionQueue, setActionQueue] = React.useState<any[]>([]);
+  const { queue, onPushToQueue, onClearAction } = useActionsQueue();
+  const { items, filterItems, resetItems } = useShop();
 
   const { toast } = useToast();
 
   React.useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
+    const len = queue.length;
+    const action = queue[len - 1];
 
-    if (lastMessage?.action) {
-      setActionQueue([...actionQueue, lastMessage?.action]);
-    }
-  }, [messages]);
-
-  React.useEffect(() => {
-    const len = actionQueue.length;
+    console.log(action);
 
     if (len > 0) {
       toast({
-        title: `DEBUG::${actionQueue[len - 1].name}`,
-        description: debugObject(actionQueue[len - 1].parameters),
+        title: `DEBUG::${action?.name}`,
+        description: !!action?.parameters && debugObject(action?.parameters),
         variant: "success",
       });
+
+      console.log("params::", action?.parameters);
+
+      queue.map((action: Action) => {
+        switch (action.name) {
+          case "GET_ITEMS":
+            resetItems();
+            onClearAction("GET_ITEMS");
+            break;
+          case "GET_ITEMS_WITH_FILTER":
+            filterItems(action?.parameters);
+            onClearAction("GET_ITEMS_WITH_FILTER");
+            break;
+          default:
+            break;
+        }
+      });
     }
-  }, [actionQueue]);
+  }, [queue]);
 
   return (
     <Layout className="p-8">
@@ -49,7 +62,7 @@ export default function Web() {
         <div className="text-4xl font-bold">AIX Hero</div>
       </Hero>
       <div className="grid grid-cols-4 gap-4">
-        {storeItems.map((item) => {
+        {items.map((item) => {
           return <Card {...item} />;
         })}
       </div>

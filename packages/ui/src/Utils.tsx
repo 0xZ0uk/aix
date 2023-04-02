@@ -20,3 +20,32 @@ export function parseGPTJSON(message: ChatCompletionResponseMessage) {
 
   return undefined;
 }
+
+export interface AppResponse {
+  action:
+    | {
+        name: string;
+        parameters: Record<string, any>;
+      }
+    | undefined;
+  message: string;
+}
+
+export function parseAppResponse(
+  message: ChatCompletionResponseMessage
+): AppResponse {
+  const jsonResponse = message.content;
+  const prefix = "JSON: ";
+  const startIndex = jsonResponse.indexOf(prefix);
+  const trimmedResponse =
+    startIndex === -1
+      ? jsonResponse
+      : jsonResponse.substring(startIndex + prefix.length);
+
+  try {
+    const response: AppResponse = JSON.parse(trimmedResponse);
+    return response;
+  } catch (e) {
+    return { action: undefined, message: "Error parsing app response" };
+  }
+}
