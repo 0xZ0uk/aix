@@ -183,7 +183,7 @@ export const Conversation: React.FC<ConversationProps> = ({
           className="border-2 border-slate-400 p-2 rounded-md"
           onChange={onChangeUserMsg}
           onSend={handleSend}
-          placeholder="Hello world"
+          placeholder="Send a message..."
           icon={<RxPaperPlane />}
         />
       </div>
