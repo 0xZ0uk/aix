@@ -4,8 +4,12 @@ import {
 } from "openai";
 import React from "react";
 import { useAIXContext } from "./Provider";
-import { cn } from "./Utils";
+import { cn, parseGPTJSON } from "../Utils";
 import { RxPaperPlane } from "react-icons/rx";
+
+export interface ChatMessage extends ChatCompletionRequestMessage {
+  action?: any;
+}
 
 interface ChatInputProps {
   input: string;
@@ -45,9 +49,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
   );
 };
 
-interface ChatBubbleProps {
-  role: ChatCompletionRequestMessageRoleEnum;
-  content: string;
+interface ChatBubbleProps extends ChatMessage {
   className?: string;
 }
 
@@ -72,14 +74,14 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
 };
 
 interface ConversationProps {
-  messages: ChatCompletionRequestMessage[];
+  messages: ChatMessage[];
   userMsg: string;
   assistantClasses?: string;
   className?: string;
   userClasses?: string;
   hint?: string;
   onChangeUserMsg: (value: string) => void;
-  onSend: (msg: ChatCompletionRequestMessage) => void;
+  onSend: (msg: ChatMessage) => void;
   onClear: () => void;
 }
 
@@ -111,8 +113,11 @@ export const Conversation: React.FC<ConversationProps> = ({
     const res = await onChatCompletion(msgs);
 
     const resMsg = {
-      role: res.data.choices[0].message?.role || "assistant",
-      content: res.data.choices[0].message?.content || "",
+      role: "assistant" as ChatCompletionRequestMessageRoleEnum,
+      action: parseGPTJSON(res.data.choices[0].message!)?.action || undefined,
+      content:
+        parseGPTJSON(res.data.choices[0].message!)?.message ||
+        res.data.choices[0].message!.content,
     };
 
     onSend(resMsg);

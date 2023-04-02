@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { useConversationStore } from "~/utils/stores";
+import { useConversationStore } from "~/utils/stores/conversation";
 import { Conversation } from "@aix/ui";
 import { cn } from "@aix/ui/src/Utils";
 
