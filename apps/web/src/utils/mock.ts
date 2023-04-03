@@ -3,10 +3,10 @@ import { Product } from "./types";
 export const storeItems: Product[] = [
   {
     id: 0,
-    title: "Product A",
+    title: "Brown 39 Sneakers",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["39 EU", "39", "39EU"],
     color: "brown",
     price: 109.9,
@@ -14,10 +14,10 @@ export const storeItems: Product[] = [
   },
   {
     id: 1,
-    title: "Product B",
+    title: "Green 36 Sneakers",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["36 EU", "36", "36EU"],
     color: "green",
     price: 89.9,
@@ -25,21 +25,21 @@ export const storeItems: Product[] = [
   },
   {
     id: 2,
-    title: "Product C",
+    title: "Black 41US boots",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["41 US", "41", "41US"],
     color: "black",
     price: 189.9,
-    type: "sneaker",
+    type: "boot",
   },
   {
     id: 3,
-    title: "Product D",
+    title: "Red 48US Sneakers",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["48 US", "48", "48US"],
     color: "red",
     price: 155.49,
@@ -47,32 +47,32 @@ export const storeItems: Product[] = [
   },
   {
     id: 4,
-    title: "Product E",
+    title: "Brown 39 Boots",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["39 EU", "39", "39EU"],
     color: "brown",
     price: 109.9,
-    type: "sneaker",
+    type: "boot",
   },
   {
     id: 5,
-    title: "Product F",
+    title: "Navy 36 EU Boots",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["36 EU", "36", "36EU"],
-    color: "green",
+    color: "navy",
     price: 89.9,
-    type: "sneaker",
+    type: "boot",
   },
   {
     id: 6,
-    title: "Product G",
+    title: "Sneakers 41 US black",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["41 US", "41", "41US"],
     color: "black",
     price: 189.9,
@@ -80,13 +80,13 @@ export const storeItems: Product[] = [
   },
   {
     id: 7,
-    title: "Product H",
+    title: "Red Boots 48 US",
     image:
       "https://images.solecollector.com/complex/image/upload/w_1000,c_fill,f_auto,fl_lossy/hkviw1d2jlksic2hzk7r.jpg",
-    description: "Think about all the fucking possibilities.",
+    description: "Lorem ipsum dolar sit amet.",
     size: ["48 US", "48", "48US"],
     color: "red",
     price: 155.49,
-    type: "sneaker",
+    type: "boot",
   },
 ];

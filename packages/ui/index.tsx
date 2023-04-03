@@ -7,6 +7,7 @@ export * from "./src/components/AIXLogo";
 export * from "./src/components/Provider";
 export * from "./src/components/Toast";
 export * from "./src/components/Toaster";
+export * from "./src/components/Viewport";
 
 export const Utils = {
   cn,
